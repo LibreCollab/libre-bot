@@ -1,2 +1,3 @@
 npm run deploy
-npm run start
+
+docker compose up --build

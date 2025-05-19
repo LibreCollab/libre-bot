@@ -1,0 +1,13 @@
+services:
+  librebot:
+    container_name: libreBot
+    image: librebot:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    volumes:
+      - ./src:/usr/src/app/src
+
