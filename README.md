@@ -48,7 +48,7 @@ This is the recommended way to run libreBot for development and deployment.
 
 ### 🛠️ Setup
 
-1.  **Clone the repository:**
+1.  **Clone the repository.**
 
 2.  **Create a `.env` file in the root of the project:** 📄
     ```env
