@@ -48,7 +48,7 @@ This is the recommended way to run libreBot for development and deployment.
 
 ### 🛠️ Setup
 
-1.  **Clone the Repository (or create your project files):**
+1.  **Clone the repository:**
 
 2.  **Create a `.env` file in the root of the project:** 📄
     ```env
@@ -70,7 +70,7 @@ This is the recommended way to run libreBot for development and deployment.
     *   Set `GUILD_ID` to your LibreCollab server ID for faster command propagation, or a test server ID during development.
 
 3.  **Run up script:** 📜
-    Before starting the bot for the first time, or whenever you add/modify command definitions, you need to register them with Discord. Run the following script from your project root `./scripts/up.sh`. This script will register the commands and do a docker compose build.
+    - Before starting the bot for the first time, or whenever you add/modify command definitions, you need to register them with Discord. Run the following script from your project root `./scripts/up.sh`. This script will register the commands and do a docker compose build.
 
 ## 💻 Development (Without Docker - if preferred)
 
