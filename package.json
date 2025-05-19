@@ -4,16 +4,17 @@
   "description": "The official LibreCollab Discord bot",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy": "node src/deployCommands.js",
+    "start": "node src/index.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LibreCollab/libre-bot.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "LibreCollab",
   "license": "MIT",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/LibreCollab/libre-bot/issues"
   },
