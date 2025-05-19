@@ -1,6 +1,6 @@
 services:
   librebot:
-    container_name: libreBot
+    container_name: librebot_app
     image: librebot:latest
     build:
       context: .
@@ -10,4 +10,31 @@ services:
       - ./.env
     volumes:
       - ./src:/usr/src/app/src
+      - ./tasks:/usr/src/app/tasks
+      - ./utils:/usr/src/app/utils 
+      - ./config.js:/usr/src/app/config.js
+    depends_on:
+      - mongo
+    networks:
+      - librebot-net
 
+  mongo:
+    container_name: librebot_mongo
+    image: mongo:latest
+    restart: unless-stopped
+    ports:
+      - "6969:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - librebot-net
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+
+volumes:
+  mongodb_data:
+
+networks:
+  librebot-net:
+    driver: bridge
