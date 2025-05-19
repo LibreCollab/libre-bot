@@ -1,10 +1,11 @@
 import { Client, Events, GatewayIntentBits, Collection } from "discord.js";
 import dotenv from "dotenv";
-import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { loadCommands } from "./utils/commandLoader.js";
 
 dotenv.config();
+
 const token = process.env.DISCORD_TOKEN;
 
 if (!token) {
@@ -22,34 +23,26 @@ const client = new Client({
 });
 
 client.commands = new Collection();
-const commandsPath = path.join(__dirname, "commands");
 
-if (!fs.existsSync(commandsPath)) {
-  console.warn(
-    "The 'commands' directory does not exist. No commands will be loaded."
-  );
-} else {
-  const commandFiles = fs
-    .readdirSync(commandsPath)
-    .filter((file) => file.endsWith(".js"));
+async function initializeCommands() {
+  const commandsPath = path.join(__dirname, "commands");
+  const loadedCommands = await loadCommands(commandsPath);
 
-  for (const file of commandFiles) {
-    const filePath = path.join(commandsPath, file);
-    const commandModule = await import(`file://${filePath}`);
-    const command = commandModule.default || commandModule;
-
+  for (const command of loadedCommands) {
     if ("data" in command && "execute" in command) {
       client.commands.set(command.data.name, command);
-      console.log(`[INFO] Loaded command: ${command.data.name}`);
+      console.log(`[INFO] Registered command: ${command.data.name}`);
     } else {
       console.warn(
-        `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
+        `[WARNING] A loaded command object is missing "data" or "execute".`
       );
     }
   }
 }
 
-client.once(Events.ClientReady, (readyClient) => {
+client.once(Events.ClientReady, async (readyClient) => {
+  await initializeCommands();
+
   console.log(`Ready! Logged in as ${readyClient.user.tag}`);
   console.log(
     `libreBot is on ${client.guilds.cache.size} server(s). Invite link: https://discord.com/oauth2/authorize?client_id=${process.env.CLIENT_ID}&scope=bot%20applications.commands&permissions=8`
@@ -64,7 +57,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
   if (!command) {
     console.error(`No command matching ${interaction.commandName} was found.`);
     await interaction.reply({
-      content: "Error: Command not found.",
+      content: `Error: Command "${interaction.commandName}" not found by the bot.`,
       ephemeral: true,
     });
     return;
@@ -73,7 +66,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
   try {
     await command.execute(interaction);
   } catch (error) {
-    console.error(error);
+    console.error("Error executing command:", error);
     if (interaction.replied || interaction.deferred) {
       await interaction.followUp({
         content: "There was an error while executing this command!",
@@ -88,4 +81,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
   }
 });
 
-client.login(token);
+(async () => {
+  await client.login(token);
+})();

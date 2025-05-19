@@ -1,8 +1,8 @@
 import { REST, Routes } from "discord.js";
 import dotenv from "dotenv";
-import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { loadCommands } from "./utils/commandLoader.js";
 
 dotenv.config();
 
@@ -20,36 +20,17 @@ if (!token || !clientId) {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const commands = [];
-const commandsPath = path.join(__dirname, "commands");
+const apiCommands = [];
 
-if (!fs.existsSync(commandsPath)) {
-  console.error(
-    "The 'commands' directory does not exist. Cannot deploy commands."
-  );
-  process.exit(1);
-}
+async function prepareApiCommands() {
+  const commandsPath = path.join(__dirname, "commands");
+  const loadedCommandModules = await loadCommands(commandsPath);
 
-const commandFiles = fs
-  .readdirSync(commandsPath)
-  .filter((file) => file.endsWith(".js"));
-
-async function loadCommands() {
-  for (const file of commandFiles) {
-    const filePath = path.join(commandsPath, file);
-    const commandModule = await import(`file://${filePath}`);
-    const command = commandModule.default || commandModule;
-
-    if ("data" in command && "execute" in command) {
-      commands.push(command.data.toJSON());
-      console.log(
-        `[INFO] Prepared command for deployment: ${command.data.name}`
-      );
-    } else {
-      console.warn(
-        `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
-      );
-    }
+  for (const commandModule of loadedCommandModules) {
+    apiCommands.push(commandModule.data.toJSON());
+    console.log(
+      `[Deploy] Prepared command for deployment: ${commandModule.data.name}`
+    );
   }
 }
 
@@ -57,35 +38,35 @@ const rest = new REST({ version: "10" }).setToken(token);
 
 (async () => {
   try {
-    await loadCommands();
+    await prepareApiCommands();
 
-    if (commands.length === 0) {
-      console.log("No commands found to deploy.");
+    if (apiCommands.length === 0) {
+      console.log("[Deploy] No commands found to deploy.");
       return;
     }
 
     console.log(
-      `Started refreshing ${commands.length} application (/) commands.`
+      `[Deploy] Started refreshing ${apiCommands.length} application (/) commands.`
     );
 
     let data;
     if (guildId) {
-      console.log(`Deploying commands to guild: ${guildId}`);
+      console.log(`[Deploy] Deploying commands to guild: ${guildId}`);
       data = await rest.put(
         Routes.applicationGuildCommands(clientId, guildId),
-        { body: commands }
+        { body: apiCommands }
       );
     } else {
-      console.log("Deploying commands globally.");
+      console.log("[Deploy] Deploying commands globally.");
       data = await rest.put(Routes.applicationCommands(clientId), {
-        body: commands,
+        body: apiCommands,
       });
     }
 
     console.log(
-      `Successfully reloaded ${data.length} application (/) commands.`
+      `[Deploy] Successfully reloaded ${data.length} application (/) commands.`
     );
   } catch (error) {
-    console.error(error);
+    console.error("[Deploy] Error during command deployment:", error);
   }
 })();
