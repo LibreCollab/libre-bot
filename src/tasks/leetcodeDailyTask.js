@@ -51,7 +51,6 @@ export const checkLeetCodeDaily = async (client) => {
   const lastNotifiedSlug = await getLastNotifiedProblemSlug(client.db);
 
   if (currentProblemSlug === lastNotifiedSlug) {
-    // console.log('[LeetCodeTask] Daily problem already notified or no change.');
     return;
   }
 
@@ -82,9 +81,6 @@ export const checkLeetCodeDaily = async (client) => {
   }
 
   try {
-    // Fetching the role from the first guild the bot is in.
-    // This might need adjustment if the bot is in multiple guilds and the role ID is generic.
-    // For a single-server bot or if GUILD_ID is set and used, this is simpler.
     const guild =
       client.guilds.cache.get(appConfig.guildId) || client.guilds.cache.first();
     if (guild) {
@@ -120,9 +116,10 @@ export const checkLeetCodeDaily = async (client) => {
       { name: "Difficulty", value: question.difficulty || "N/A", inline: true },
       {
         name: "Success Rate",
-        value: `${(question.acRate * 100).toFixed(1)}%` || "N/A",
+        value: `${parseFloat(question.acRate).toFixed(1)}%` || "N/A",
         inline: true,
       },
+
       { name: "Link", value: hyperlink("Solve Problem", problemUrl) }
     )
     .setColor(difficultyColors[question.difficulty] || 0x7289da)
