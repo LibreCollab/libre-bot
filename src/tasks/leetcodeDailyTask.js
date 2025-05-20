@@ -107,7 +107,7 @@ export const checkLeetCodeDaily = async (client) => {
   };
 
   const embed = new EmbedBuilder()
-    .setTitle(`🆕 New LeetCode Daily Problem: ${question.title}`)
+    .setTitle(`🆕 ${question.title}`)
     .setURL(problemUrl)
     .setDescription(
       `A new daily coding challenge is available on LeetCode! Good luck! 🍀`
