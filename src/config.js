@@ -47,7 +47,6 @@ const requiredConfigs = [
     envVar: 'LEETCODE_NOTIFICATIONS_CHANNEL_ID',
     message: 'Error: LEETCODE_NOTIFICATIONS_CHANNEL_ID is missing.',
   },
-  // Add other essential configs here if needed
 ];
 
 let hasMissingConfig = false;
