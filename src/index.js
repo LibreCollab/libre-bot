@@ -6,6 +6,7 @@ import axios from "axios";
 import appConfig from "./config.js";
 import { loadCommands } from "./utils/commandLoader.js";
 import { checkHetznerAuction } from "./tasks/hetznerAuctionTask.js";
+import { checkLeetCodeDaily } from "./tasks/leetcodeDailyTask.js";
 
 const token = appConfig.discordToken;
 
@@ -30,6 +31,7 @@ client.httpClient = axios.create({
 });
 client.commands = new Collection();
 let hetznerCheckInterval = null;
+let leetcodeCheckInterval = null;
 
 async function initializeCommands() {
   const commandsPath = path.join(__dirname, "commands");
@@ -64,6 +66,18 @@ client.once(Events.ClientReady, async (readyClient) => {
     console.log("[INFO] Hetzner auction check task scheduled.");
   } catch (error) {
     console.error("[ERROR] Failed to start Hetzner auction task:", error);
+  }
+
+  console.log("[INFO] Starting LeetCode daily problem check task...");
+  try {
+    await checkLeetCodeDaily(client); // Initial check
+    leetcodeCheckInterval = setInterval(
+      async () => await checkLeetCodeDaily(client),
+      30 * 60 * 1000 // Check every 30 minutes
+    );
+    console.log("[INFO] LeetCode daily problem check task scheduled.");
+  } catch (error) {
+    console.error("[ERROR] Failed to start LeetCode daily task:", error);
   }
 });
 
@@ -128,6 +142,10 @@ async function shutdown(signal) {
   if (hetznerCheckInterval) {
     clearInterval(hetznerCheckInterval);
     console.log("[INFO] Stopped Hetzner auction check task.");
+  }
+  if (leetcodeCheckInterval) {
+    clearInterval(leetcodeCheckInterval);
+    console.log("[INFO] Stopped Leetcode daily task.");
   }
   if (client.mongo) {
     await client.mongo.close();
