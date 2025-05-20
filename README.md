@@ -70,6 +70,10 @@ This is the recommended way to run libreBot for development and deployment.
 
     # Hetzner Feature Configuration
     HETZNER_NOTIFICATIONS_CHANNEL_ID=YOUR_DISCORD_CHANNEL_ID_FOR_NOTIFICATIONS
+
+    # Leetcode Feature Configuration
+    LEETCODE_DAILY_ROLE_ID=YOUR_LEETCODE_DAILY_ROLE_ID
+    LEETCODE_NOTIFICATIONS_CHANNEL_ID=YOUR_DISCORD_CHANNEL_ID_FOR_NOTIFICATIONS
     ```
     *   Replace placeholder values with your actual information.
     *   The `MONGODB_URI` is specifically formatted for the Docker Compose setup where `mongo` is the service name of the MongoDB container.
