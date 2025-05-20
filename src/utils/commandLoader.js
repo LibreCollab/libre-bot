@@ -7,7 +7,7 @@ import path from "node:path";
  * @returns {Promise<Array<Object>>} A promise that resolves to an array of command modules.
  *                                    Each module should have 'data' and 'execute' properties.
  */
-export async function loadCommands(commandsDirPath) {
+export const loadCommands = async (commandsDirPath) => {
   const commands = [];
 
   if (!fs.existsSync(commandsDirPath)) {
@@ -43,4 +43,4 @@ export async function loadCommands(commandsDirPath) {
     }
   }
   return commands;
-}
+};

@@ -22,7 +22,7 @@ const __dirname = path.dirname(__filename);
 
 const apiCommands = [];
 
-async function prepareApiCommands() {
+const prepareApiCommands = async () => {
   const commandsPath = path.join(__dirname, "commands");
   const loadedCommandModules = await loadCommands(commandsPath);
 
@@ -32,7 +32,7 @@ async function prepareApiCommands() {
       `[Deploy] Prepared command for deployment: ${commandModule.data.name}`
     );
   }
-}
+};
 
 const rest = new REST({ version: "10" }).setToken(token);
 

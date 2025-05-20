@@ -33,7 +33,7 @@ client.commands = new Collection();
 let hetznerCheckInterval = null;
 let leetcodeCheckInterval = null;
 
-async function initializeCommands() {
+const initializeCommands = async () => {
   const commandsPath = path.join(__dirname, "commands");
   const loadedCommands = await loadCommands(commandsPath);
   for (const command of loadedCommands) {
@@ -42,7 +42,7 @@ async function initializeCommands() {
       console.log(`[INFO] Registered command: ${command.data.name}`);
     }
   }
-}
+};
 
 client.once(Events.ClientReady, async (readyClient) => {
   await initializeCommands();
@@ -110,7 +110,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
   }
 });
 
-async function main() {
+const main = async () => {
   try {
     console.log("[DB] Connecting to MongoDB...");
     const mongoClient = new MongoClient(appConfig.mongodbURI, {
@@ -135,9 +135,9 @@ async function main() {
     }
     process.exit(1);
   }
-}
+};
 
-async function shutdown(signal) {
+const shutdown = async (signal) => {
   console.log(`[INFO] Received ${signal}. Shutting down gracefully...`);
   if (hetznerCheckInterval) {
     clearInterval(hetznerCheckInterval);
@@ -156,7 +156,7 @@ async function shutdown(signal) {
     console.log("[INFO] Discord client destroyed.");
   }
   process.exit(0);
-}
+};
 
 process.on("SIGINT", () => shutdown("SIGINT"));
 process.on("SIGTERM", () => shutdown("SIGTERM"));

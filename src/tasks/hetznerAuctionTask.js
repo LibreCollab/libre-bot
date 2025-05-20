@@ -13,11 +13,11 @@ const HETZNER_EUR_URL =
 const USER_AGENT =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Safari/605.1.15";
 
-async function sleep(ms) {
+const sleep = async (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
-}
+};
 
-function formatDescription(descriptionArray) {
+const formatDescription = (descriptionArray) => {
   if (!Array.isArray(descriptionArray)) return "N/A";
   const longItems = descriptionArray.filter((item) => item.length > 10);
   const shortItems = descriptionArray.filter((item) => item.length <= 10);
@@ -29,9 +29,9 @@ function formatDescription(descriptionArray) {
     formatted += shortItems.join(" - ");
   }
   return formatted || "N/A";
-}
+};
 
-export async function checkHetznerAuction(client) {
+export const checkHetznerAuction = async (client) => {
   if (!client.db || !client.httpClient) {
     console.error("[HetznerTask] DB or HTTP client not initialized.");
     return;
@@ -71,7 +71,7 @@ export async function checkHetznerAuction(client) {
       headers: { "User-Agent": USER_AGENT },
     });
     usdData = usdResponse.data;
-    await sleep(5000); // Be nice to Hetzner
+    await sleep(5000); // Be nice to Hetzner :P
     const eurResponse = await client.httpClient.get(HETZNER_EUR_URL, {
       headers: { "User-Agent": USER_AGENT },
     });
@@ -273,4 +273,4 @@ export async function checkHetznerAuction(client) {
   } catch (error) {
     console.error("[HetznerTask] Error deleting old configs:", error);
   }
-}
+};

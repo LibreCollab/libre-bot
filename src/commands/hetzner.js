@@ -172,15 +172,14 @@ export default {
         (configData[key] === "Any" || configData[key] === "All") &&
         key !== "currency"
       ) {
-        delete configData[key]; // Don't store "Any" or "All" unless it's the only option
+        delete configData[key];
       }
       if (
         (key === "ram_ecc" && configData[key] === false) ||
         (typeof configData[key] === "number" &&
           configData[key] === 0 &&
-          !["price", "vat_percentage"].includes(key)) // Don't store 0 for min values unless it's price/vat
+          !["price", "vat_percentage"].includes(key))
       ) {
-        // Check if the option was actually provided by the user or if it's a default
         const optionProvided = interaction.options.get(
           key === "cpu_type" ? "cpu_type" : key.replace("_size", "") // hacky for option name
         );
