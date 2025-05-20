@@ -43,7 +43,6 @@ export const getDailyCodingChallenge = async () => {
       {
         headers: {
           "Content-Type": "application/json",
-          // 'Referer': 'https://leetcode.com/problemset/all/', // Sometimes helps
         },
       }
     );
