@@ -1,4 +1,4 @@
-# 🤖 libreBot - Your Friendly Neighborhood Bot for LibreCollab
+# 🤖 libreBot - Your Friendly Neighborhood Bot
 
 libreBot is a versatile Discord bot built to serve the LibreCollab community. It offers a range of utilities and fun commands, with new features being added over time. One of its key features is a Hetzner Server Auction notifier.
 
@@ -9,7 +9,7 @@ libreBot is a versatile Discord bot built to serve the LibreCollab community. It
 *   🧱 **Modular Design**: Built with a clean architecture to easily add new features.
 *   🐳 **Dockerized**: Easy to set up and run using Docker and Docker Compose.
 
-## 📡 Featured Module: Hetzner Auction Notifier
+## 📡 New Feature: Hetzner Auction Notifier
 
 libreBot can help you stay updated on the Hetzner server auction!
 *   ⚙️ **Customizable Notifications**: Set your desired server specifications:
@@ -27,13 +27,19 @@ libreBot can help you stay updated on the Hetzner server auction!
 
 ## 🎮 Available Commands
 
-*   `/ping` 📶: Checks the bot's responsiveness and latency.
-*   `/hello` 👋: A simple test command to ensure the bot is active.
-*   **Hetzner Auction Module:**
+*   `/ping`: Checks the bot's responsiveness and latency.
+
+*   **Hetzner Auction Feature:**
     *   `/hetzner [options...]`: Set up a new Hetzner server auction alert.
         *   Example: `/hetzner price:70 currency:EUR location:FSN ram_size:64 ram_ecc:true drive_type:NVMe`
     *   `/hetzner_clear`: Deletes all of your currently active Hetzner alert configurations.
+
+*   **LeetCode Daily Notifier Feature:**
+    *   `/lock action:in`: Opt-in to receive daily LeetCode problem notifications. (Assigns the "LC" role)
+    *   `/lock action:out`: Opt-out of daily LeetCode problem notifications. (Removes the "LC" role)
+
 *   *(More commands to come! 🚀)*
+
 
 ## 🐳 Quick Start with Docker
 
@@ -50,7 +56,7 @@ This is the recommended way to run libreBot for development and deployment.
 
 1.  **Clone the repository.**
 
-2.  **Create a `.env` file in the root of the project:** 📄
+2.  **Create a `.env` file in the root of the project:**
     ```env
     # Discord Bot Credentials
     DISCORD_TOKEN=YOUR_DISCORD_BOT_TOKEN_HERE
@@ -69,7 +75,7 @@ This is the recommended way to run libreBot for development and deployment.
     *   The `MONGODB_URI` is specifically formatted for the Docker Compose setup where `mongo` is the service name of the MongoDB container.
     *   Set `GUILD_ID` to your LibreCollab server ID for faster command propagation, or a test server ID during development.
 
-3.  **Run up script:** 📜
+3.  **Run up script:**
     - Before starting the bot for the first time, or whenever you add/modify command definitions, you need to register them with Discord. Run the following script from your project root `./scripts/up.sh`. This script will register the commands and do a docker compose build.
 
 ## 💻 Development (Without Docker - if preferred)
