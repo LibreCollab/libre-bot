@@ -3,7 +3,7 @@ import appConfig from '../config.js';
 
 export default {
   data: new SlashCommandBuilder()
-    .setName('lock_in')
+    .setName('lock')
     .setDescription('Manage your LeetCode daily problem notification role.')
     .setDMPermission(false)
     .addStringOption((option) =>
@@ -12,8 +12,8 @@ export default {
         .setDescription('Choose to join or leave the notification role.')
         .setRequired(true)
         .addChoices(
-          { name: 'Join Notifications', value: 'join' },
-          { name: 'Leave Notifications', value: 'leave' },
+          { name: 'Join Notifications', value: 'in' },
+          { name: 'Leave Notifications', value: 'out' },
         ),
     ),
 
@@ -55,7 +55,7 @@ export default {
     const embed = new EmbedBuilder().setColor(0x0099ff); // Blue color
 
     try {
-      if (action === 'join') {
+      if (action === 'in') {
         if (member.roles.cache.has(role.id)) {
           embed
             .setTitle('ℹ️ Already Subscribed')
@@ -70,7 +70,7 @@ export default {
               `You've been given the ${role.name} role and will now receive LeetCode daily problem notifications.`,
             );
         }
-      } else if (action === 'leave') {
+      } else if (action === 'out') {
         if (!member.roles.cache.has(role.id)) {
           embed
             .setTitle('ℹ️ Not Subscribed')
